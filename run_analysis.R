@@ -35,22 +35,26 @@ for (i in 1:length(sets)) {
   sets[[i]]$data <- data
 }
 
-## Now combine the two data frames together into one.
+## Now combine the two data frames together into one and write to disk.
 data <- rbind(sets[[1]]$data, sets[[2]]$data)
+write.table(data, file="tidy_data.txt")
 
-
+############################################################
 
 ## Next up, we will consolidate this Data Frame still further by taking 
 ## the mean of each measure in the data set above, grouped by Subject and Activity
 
 ## To do this, we'll use the plyr package and ddply function
-df <- ddply(data, c("subject_id", "activity"), function(df) {
-  x <- data.frame(0)
-  print(str(d))
-  for(i in ncol(df)) {
-    if(class(df[,i]) == "numeric") {
-      x[[colnames(df)[i]]] <- mean(df[,i])
-    }
-  }
-  x
+library(plyr)
+summary <- ddply(data, c("subject_id", "activity"), function(df) {
+  ## Because the first 3 columns are factorial, not numeric, we skip those.
+  colMeans(df[,4:ncol(df)])
 })
+write.table(summary, file="summarized_tidy_data.txt")
+
+############################################################
+
+## Just to have a little fun, let's generate a heatmap of the new summarized data
+png(file="./heatmap.png", width=3000, height=3000)
+heatmap(as.matrix(summary[3:nrow(summary)]), cexRow=3, cexCol=4, margins=c(50, 5))
+dev.off()
