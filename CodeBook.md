@@ -29,6 +29,7 @@ Description: indicates the type of activity that the individual was undertaking
 
 ### Measurements
 Type: Numeric
+
 Description: The remaining set of variables are the measurements taken from
 the sensors in the Galaxy phone use in the experiment. Of the original set of
 measurements, this data set has been stripped down to only the means and 
